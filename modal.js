@@ -1,6 +1,7 @@
 class Modal extends HTMLElement {
     constructor() {
         super();
+        this.isOpen = false;
         this.attachShadow({ mode: 'open'});
         this.shadowRoot.innerHTML = `
             <style>
@@ -42,7 +43,7 @@ class Modal extends HTMLElement {
                     padding: 1rem;
                 }
 
-                header h1 {
+                ::slotted(h1) {
                     font-size: 1.25rem;
                 }
 
@@ -64,7 +65,7 @@ class Modal extends HTMLElement {
             <div id="backdrop"></div>
             <div id="modal">
                 <header>
-                    <h1>Please Confirm</h1>
+                    <slot name="title">Please Confirm Payment</slot>
                 </header>
                 <section id="main">
                     <slot></slot> 
@@ -77,20 +78,24 @@ class Modal extends HTMLElement {
         `
     }
 
-    // attributeChangedCallback(name, oldValue, newValue) {
-    //     if (name === 'opened') {
-    //         if (this.hasAttribute('opened')) {
-    //             this.shadowRoot.querySelector("#backdrop").style.opacity = 1;
-    //             this.shadowRoot.querySelector('#backdrop').style.pointerEvents = 'all';
-    //             this.shadowRoot.querySelector("#modal").style.opacity = 1;
-    //             this.shadowRoot.querySelector('#modal').style.pointerEvents = 'all';
-    //         }
-    //     }
-    // }
+    attributeChangedCallback(name, oldValue, newValue) {      
+            if (this.hasAttribute('opened')) {
+                this.isOpen = true;
+                // this.shadowRoot.querySelector("#backdrop").style.opacity = 1;
+                // this.shadowRoot.querySelector('#backdrop').style.pointerEvents = 'all';
+                // this.shadowRoot.querySelector("#modal").style.opacity = 1;
+                // this.shadowRoot.querySelector('#modal').style.pointerEvents = 'all';
+            }
+    }
 
     // static get observedAttributes() {
     //     return ['opened'];
     // }
+
+    open() {
+        this.setAttribute('opened', '')
+        this.isOpen = true;
+    }
 }
 
 customElements.define('uc-modal', Modal)
